@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.html",
   "scripts": {
-    "start": " node dist/app.js"
+    "start": "tsc node dist/app.js",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
