@@ -13,7 +13,6 @@ const commands = [
 Bot_1.default.setMyCommands(commands);
 Bot_1.default.on("message", TariffAction_1.default);
 Bot_1.default.on("callback_query", TariffAction_1.default);
-Bot_1.default.setWebHook("https://ef1704-bot.vercel.app");
 // Start an Express server to keep Vercel happy
 const app = express();
 app.get("/", (req, res) => {

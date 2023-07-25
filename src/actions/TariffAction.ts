@@ -40,6 +40,17 @@ const documentWeightOptions = {
     ],
   },
 };
+const centimetreOptions = {
+  reply_markup: {
+    inline_keyboard: [
+      [
+        { text: "10", callback_data: "10" },
+        { text: "50", callback_data: "50" },
+        { text: "100", callback_data: "100" },
+      ],
+    ],
+  },
+};
 
 const getConsignmentTariff = async (state) => {
   const { chatId, text, id } = state;
@@ -78,7 +89,7 @@ ${volumetricWeightString}
           .sort((a, b) => (Number(a?.price) > Number(b?.price) ? -1 : 1))
           .map((item) => [
             {
-              text: `₹${item.price} \n ${item.serviceType} (${item.period})`,
+              text: `${item.serviceType} (${item.period}) \n ₹${item.price} `,
               callback_data: item.serviceType,
             },
           ]),
@@ -89,7 +100,11 @@ ${volumetricWeightString}
       parse_mode: "Markdown",
     });
     setTimeout(() => {
-      Bot.sendMessage(chatId, "Price Details", priceOptions);
+      Bot.sendMessage(
+        chatId,
+        "- - - - - - - - - - - - - Price Details - - - - - - - - - - - - -",
+        priceOptions
+      );
     }, 100);
   } catch (err) {
     console.log(err);
@@ -126,7 +141,9 @@ const getDeliveryPincode = async (state) => {
             state
           )} is serviceable 👍`
         );
-        Bot.sendMessage(chatId, `Select Document Type`, documentsOptions);
+        setTimeout(() => {
+          Bot.sendMessage(chatId, `Select Document Type`, documentsOptions);
+        }, 500);
         return true;
       } else {
         Bot.sendMessage(chatId, "Area not serviceable 😞");
@@ -178,7 +195,11 @@ const getNonDocumentWeight = async (state) => {
     const weight = Number(text);
     tariffMessage.payload.weight = (weight * 1000).toString();
     tariffMessage.step = STEPS.NON_DOCUMENT_LENGTH_SELECTION;
-    Bot.sendMessage(chatId, "Enter Non Document Length in CM (eg: 10)");
+    Bot.sendMessage(
+      chatId,
+      "Enter Non Document Length in CM (eg: 10)",
+      centimetreOptions
+    );
     return true;
   }
 };
@@ -190,7 +211,11 @@ const getNonDocumentLength = async (state) => {
   if (tariffMessage.step === STEPS.NON_DOCUMENT_LENGTH_SELECTION) {
     tariffMessage.payload["length"] = text;
     tariffMessage.step = STEPS.NON_DOCUMENT_BREADTH_SELECTION;
-    Bot.sendMessage(chatId, "Enter Non Document Length in CM (eg: 10)");
+    Bot.sendMessage(
+      chatId,
+      "Enter Non Document Breadth in CM (eg: 10)",
+      centimetreOptions
+    );
     return true;
   }
 };
@@ -202,7 +227,11 @@ const getNonDocumentBreadth = async (state) => {
   if (tariffMessage.step === STEPS.NON_DOCUMENT_BREADTH_SELECTION) {
     tariffMessage.payload.breadth = text;
     tariffMessage.step = STEPS.NON_DOCUMENT_HEIGHT_SELECTION;
-    Bot.sendMessage(chatId, "Enter Non Document Height in CM (eg: 10)");
+    Bot.sendMessage(
+      chatId,
+      "Enter Non Document Height in CM (eg: 10)",
+      centimetreOptions
+    );
     return true;
   }
 };

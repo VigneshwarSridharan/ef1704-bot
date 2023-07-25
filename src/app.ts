@@ -11,8 +11,6 @@ Bot.setMyCommands(commands);
 Bot.on("message", GetTariffAction);
 Bot.on("callback_query", GetTariffAction);
 
-Bot.setWebHook("https://ef1704-bot.vercel.app");
-
 // Start an Express server to keep Vercel happy
 const app = express();
 
