@@ -1,17 +1,28 @@
-import GetTariffAction from "./actions/TariffAction";
+import HelpAction from "./actions/HelpAction";
+import { GetTariffAction, handleTariffMessages } from "./actions/TariffAction";
+import { watchCommand, watchCommandMessages, watchCommandOptions } from "./functions";
 import Bot from "./utils/Bot";
+import { COMMANDS } from "./utils/constants";
 const express = require("express");
 
 const commands = [
-  { command: "/tariff", description: "Get tariff details of consignment" },
-  { command: "/help", description: "Help" },
+  { command: COMMANDS.TARIFF, description: "Get tariff details of consignment" },
+  { command: COMMANDS.HELP, description: "Help" },
 ];
+
 Bot.setMyCommands(commands);
 
-Bot.on("message", GetTariffAction);
-Bot.on("callback_query", GetTariffAction);
+Bot.on('polling_error', (error) => {
+  console.error('Polling error:', error.message);
+});
 
-// Start an Express server to keep Vercel happy
+Bot.on("message", watchCommand(COMMANDS.TARIFF, GetTariffAction));
+Bot.on("message", watchCommandMessages(COMMANDS.TARIFF, handleTariffMessages));
+Bot.on("callback_query", watchCommandOptions(COMMANDS.TARIFF, handleTariffMessages));
+
+
+Bot.on("message", watchCommand(COMMANDS.HELP, HelpAction));
+
 const app = express();
 
 app.get("/", (req, res) => {
