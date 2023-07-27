@@ -1,4 +1,4 @@
-export const BOT_TOKEN = "6037269520:AAFdNd-w9Ahkjf_xIWZlGv6ObqsPqIaPECw";
+export const BOT_TOKEN = "6037269520:AAH9_hKA2LRaMLwX3lYjWum2NZPgmvAeHpY";
 
 export const EBOOKING_BACKEND_BASE_URL = "https://ebookingbackend.shipsy.in";
 export const EFR_BOOKING_URL =
@@ -18,3 +18,8 @@ export const STEPS = {
   NON_DOCUMENT_BREADTH_SELECTION: "NON_DOCUMENT_BREADTH_SELECTION",
   NON_DOCUMENT_HEIGHT_SELECTION: "NON_DOCUMENT_HEIGHT_SELECTION",
 };
+
+export const COMMANDS = {
+  TARIFF: "/tariff",
+  HELP: "/help",
+}

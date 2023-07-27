@@ -2,10 +2,9 @@ import { sentenceCase } from "change-case";
 import { BaseService } from "../utils/APIService";
 import Bot from "../utils/Bot";
 import { SERVICES, STEPS } from "../utils/constants";
-import Table from "cli-table";
-import { table as table1 } from "table";
+import { tariffMessagesDB } from "../utils/store";
 
-const tariffMessages = {};
+const tariffMessages = {}
 
 const documentsOptions = {
   reply_markup: {
@@ -71,9 +70,8 @@ const getConsignmentTariff = async (state) => {
       payload.courierType === "NON-DOCUMENT"
         ? `
 *Volumetric Weight:* ${volumetricWeight.toFixed(2)} KG
-${payload.length} x ${payload.breadth} x ${
-            payload.height
-          } / 5000 = ${volumetricWeight.toFixed(2)} KG      `
+${payload.length} x ${payload.breadth} x ${payload.height
+        } / 5000 = ${volumetricWeight.toFixed(2)} KG      `
         : ``;
     const payloadMessage = `Consignment Details:
 *Pickup Pincode:* ${payload.pickupPincode}
@@ -269,7 +267,7 @@ const handleSteps = async (state) => {
   if (await getNonDocumentHeight(state)) return;
 };
 
-const GetTariffAction = (query) => {
+export const GetTariffAction = (query) => {
   const chatId = !!query.chat_instance ? query.message.chat.id : query.chat.id;
   const text = !!query.chat_instance ? query.data : query.text;
   const id = query.id;
@@ -280,7 +278,7 @@ const GetTariffAction = (query) => {
   };
 
   if (text === "/tariff") {
-    tariffMessages[chatId] = {
+    const data = {
       step: STEPS.DELIVERY_PINCODE_SELECTION,
       lastMessageId: null,
       payload: {
@@ -292,15 +290,32 @@ const GetTariffAction = (query) => {
         id: "efrDom",
       },
     };
+    tariffMessages[chatId] = data
+
+
+    tariffMessagesDB.set(chatId, { chatId, ...data, }).write();
+
 
     Bot.sendMessage(chatId, "Please enter delivery pincode");
     return;
   }
+};
+
+
+
+export const handleTariffMessages = query => {
+  const chatId = !!query.chat_instance ? query.message.chat.id : query.chat.id;
+  const text = !!query.chat_instance ? query.data : query.text;
+  const id = query.id;
+  const state = {
+    chatId,
+    text,
+    id,
+  };
 
   console.log("step => ", tariffMessages[chatId]?.step);
+
   if (!!tariffMessages[chatId]) {
     handleSteps(state);
   }
-};
-
-export default GetTariffAction;
+}
