@@ -1,7 +1,7 @@
 import { sentenceCase } from "change-case";
-import { BaseService } from "../utils/APIService";
+import { EBookingService } from "../utils/APIService";
 import Bot from "../utils/Bot";
-import { SERVICES, STEPS } from "../utils/constants";
+import { EBOOKING_SERVICES, STEPS } from "../utils/constants";
 import { tariffMessagesDB } from "../utils/store";
 
 const tariffMessages = {}
@@ -57,8 +57,8 @@ const getConsignmentTariff = async (state) => {
 
   try {
     const { payload } = tariffMessage;
-    const { data } = await BaseService.post(
-      SERVICES.GET_PRICE_AND_TAT,
+    const { data } = await EBookingService.post(
+      EBOOKING_SERVICES.GET_PRICE_AND_TAT,
       payload
     );
 
@@ -121,7 +121,7 @@ const getDeliveryPincode = async (state) => {
     }
 
     try {
-      const { data } = await BaseService.get(SERVICES.GET_USER_SEARCH, {
+      const { data } = await EBookingService.get(EBOOKING_SERVICES.GET_USER_SEARCH, {
         phone: "",
         id: "efrbooking",
         searchString: text,

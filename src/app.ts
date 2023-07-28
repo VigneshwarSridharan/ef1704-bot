@@ -1,25 +1,43 @@
 import HelpAction from "./actions/HelpAction";
 import { GetTariffAction, handleTariffMessages } from "./actions/TariffAction";
-import { watchCommand, watchCommandMessages, watchCommandOptions } from "./functions";
+import { pincodeCommand, pincodeCommandMessages } from "./actions/pincode";
+import {
+  watchCommand,
+  watchCommandMessages,
+  watchCommandOptions,
+} from "./utils/functions";
 import Bot from "./utils/Bot";
 import { COMMANDS } from "./utils/constants";
+import { DRSCommand } from "./actions/drs";
 const express = require("express");
 
 const commands = [
-  { command: COMMANDS.TARIFF, description: "Get tariff details of consignment" },
+  { command: COMMANDS.TARIFF, description: "Tariff" },
+  { command: COMMANDS.PINCODE, description: "Search Pincode" },
+  { command: COMMANDS.DRS, description: "DRS" },
   { command: COMMANDS.HELP, description: "Help" },
 ];
 
 Bot.setMyCommands(commands);
 
-Bot.on('polling_error', (error) => {
-  console.error('Polling error:', error.message);
+Bot.on("polling_error", (error) => {
+  console.error("Polling error:", error.message);
 });
 
 Bot.on("message", watchCommand(COMMANDS.TARIFF, GetTariffAction));
 Bot.on("message", watchCommandMessages(COMMANDS.TARIFF, handleTariffMessages));
-Bot.on("callback_query", watchCommandOptions(COMMANDS.TARIFF, handleTariffMessages));
+Bot.on(
+  "callback_query",
+  watchCommandOptions(COMMANDS.TARIFF, handleTariffMessages)
+);
 
+Bot.on("message", watchCommand(COMMANDS.PINCODE, pincodeCommand));
+Bot.on(
+  "message",
+  watchCommandMessages(COMMANDS.PINCODE, pincodeCommandMessages)
+);
+
+Bot.on("message", watchCommand(COMMANDS.DRS, DRSCommand));
 
 Bot.on("message", watchCommand(COMMANDS.HELP, HelpAction));
 
