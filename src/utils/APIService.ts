@@ -45,7 +45,7 @@ const withAuth = async (config) => {
   const accessToken =
     botStore.get("dashboardService.accessToken").value() || {};
   let { id, expiry_at } = accessToken || {};
-  if (!moment().isBefore(moment(expiry_at))) {
+  if (!moment().isBefore(moment(expiry_at)) || !id) {
     let headersList = {
       "Organisation-Pretty-Name": "dtdcdashboard",
       "Content-Type": "application/json",
