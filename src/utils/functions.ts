@@ -1,3 +1,4 @@
+import Bot from "./Bot";
 import { chat } from "./store";
 
 export const watchCommand = (command, action) => (query) => {
@@ -5,6 +6,7 @@ export const watchCommand = (command, action) => (query) => {
   const chatId = query.chat.id;
   if (text === command) {
     chat.set(`${chatId}.command`, command).write();
+    Bot.sendChatAction(chatId, "typing");
     action(query);
   }
 };
@@ -16,6 +18,7 @@ export const watchCommandMessages = (command, handler) => (query) => {
     !text.startsWith("/") &&
     chat.get(`${chatId}.command`).value() === command
   ) {
+    Bot.sendChatAction(chatId, "typing");
     handler(query);
   }
 };
@@ -26,6 +29,7 @@ export const watchCommandOptions = (command, handler) => (query) => {
   const id = query.id;
 
   if (text !== command && chat.get(`${chatId}.command`).value() === command) {
+    Bot.sendChatAction(chatId, "typing");
     handler(query);
   }
 };

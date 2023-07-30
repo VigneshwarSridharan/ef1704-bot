@@ -68,8 +68,6 @@ const withAuth = async (config) => {
     );
     const access_token = get(response, "data.access_token") || {};
     id = access_token.id;
-    console.log("1 =>", access_token);
-    console.log("2 => ", id);
 
     botStore.set("dashboardService.accessToken", access_token).write();
   }
@@ -79,8 +77,8 @@ const withAuth = async (config) => {
     "Access-Token": id,
     "User-Id": "1680963761063593208",
     "Organisation-Id": "1",
+    "Application-Type": "ops",
   };
-  console.log("3 => ", id);
   return DashboardAPIService.request({
     headers,
     ...config,
@@ -97,5 +95,3 @@ export const DashboardService = {
       ...config,
     }),
 };
-
-// data: { status: 0, desc: 'Not Authorized' }
