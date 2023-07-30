@@ -14,6 +14,7 @@ export const EBOOKING_SERVICES = {
 export const DASHBOARD_SERVICES = {
   DRS_DOWNLOAD: `/Dashboard/Mediums/1681618003457737948/printDRS`,
   LOGIN: `/dashboard/login`,
+  TRANCK_CONSIGNMENT: "/CRMDashboard/consignments/fetchOne",
 };
 
 export const STEPS = {
@@ -29,6 +30,7 @@ export const STEPS = {
 export const COMMANDS = {
   TARIFF: "/tariff",
   PINCODE: "/pincode",
+  TRACK: "/track",
   DRS: "/drs",
   HELP: "/help",
 };

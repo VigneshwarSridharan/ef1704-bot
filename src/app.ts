@@ -9,11 +9,18 @@ import {
 import Bot from "./utils/Bot";
 import { COMMANDS } from "./utils/constants";
 import { DRSCommand } from "./actions/drs";
+import { trackCommand, trackCommandMessages } from "./actions/track";
+import {
+  tariffCommand,
+  tariffCommandMessages,
+  tariffCommandOptions,
+} from "./actions/tariff";
 const express = require("express");
 
 const commands = [
   { command: COMMANDS.TARIFF, description: "Tariff" },
   { command: COMMANDS.PINCODE, description: "Search Pincode" },
+  { command: COMMANDS.TRACK, description: "Track Consignment" },
   { command: COMMANDS.DRS, description: "DRS" },
   { command: COMMANDS.HELP, description: "Help" },
 ];
@@ -36,6 +43,9 @@ Bot.on(
   "message",
   watchCommandMessages(COMMANDS.PINCODE, pincodeCommandMessages)
 );
+
+Bot.on("message", watchCommand(COMMANDS.TRACK, trackCommand));
+Bot.on("message", watchCommandMessages(COMMANDS.TRACK, trackCommandMessages));
 
 Bot.on("message", watchCommand(COMMANDS.DRS, DRSCommand));
 
